@@ -1,0 +1,9 @@
+[project]
+name = "telegram-weather-bot"
+version = "1.0.0"
+description = "Погода в Telegram: Open-Meteo (без ключа) + рассылка + кэш"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
