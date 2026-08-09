@@ -23,6 +23,7 @@ import asyncio
 import html as _html
 import logging
 import os
+from datetime import date
 
 from aiogram import Bot, Dispatcher, Router
 from aiogram.client.default import DefaultBotProperties
@@ -81,9 +82,26 @@ def _format_current(name: str, weather) -> str:
     )
 
 
+_WEEKDAYS = ("Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс")
+
+
+def _day_label(date_str: str) -> str:
+    """'2026-08-07' → 'Сегодня' для сегодняшнего дня, иначе 'Пт, 07.08'.
+
+    Если дата не разбирается (демо-режим: 'day+0') — возвращаем как есть.
+    """
+    if date_str == date.today().isoformat():
+        return "Сегодня"
+    try:
+        day = date.fromisoformat(date_str)
+    except ValueError:
+        return date_str
+    return f"{_WEEKDAYS[day.weekday()]}, {day.strftime('%d.%m')}"
+
+
 def _format_forecast(name: str, days) -> str:
     lines = [f"📅 <b>Прогноз для {_html.escape(name)} на {len(days)} дней</b>\n"]
-    lines += [f"• {d.describe()}" for d in days]
+    lines += [f"• {d.describe(_day_label(d.date))}" for d in days]
     return "\n".join(lines)
 
 

@@ -45,6 +45,18 @@ class FakeTransport(httpx.AsyncBaseTransport):
         return httpx.Response(200, json=self.payload, request=request)
 
 
+def test_day_label() -> None:
+    from datetime import date
+
+    from bot import _day_label
+
+    assert _day_label(date.today().isoformat()) == "Сегодня"
+    assert _day_label("2026-08-07") == "Пт, 07.08"   # 7 августа 2026 — пятница
+    assert _day_label("2026-08-08") == "Сб, 08.08"
+    assert _day_label("day+0") == "day+0"           # демо-режим — как есть
+    assert _day_label("мусор") == "мусор"
+
+
 def test_wmo_map() -> None:
     assert wmo(0) == ("Ясно", "☀️")
     assert wmo(95) == ("Гроза", "⛈")

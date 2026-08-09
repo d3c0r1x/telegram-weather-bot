@@ -64,10 +64,11 @@ class DayForecast(BaseModel):
     t_min: float
     precip_prob: float = 0.0
 
-    def describe(self) -> str:
+    def describe(self, label: str | None = None) -> str:
         desc, emoji = wmo(self.code)
+        prefix = label or self.date
         return (
-            f"{self.date}: {emoji} {desc}, "
+            f"{prefix}: {emoji} {desc}, "
             f"{self.t_min:.0f}…{self.t_max:.0f}°C, осадки {self.precip_prob:.0f}%"
         )
 
