@@ -51,10 +51,15 @@ class CurrentWeather(BaseModel):
     wind_speed: float = 0.0
     humidity: float = 0.0
     code: int = 0
+    sunrise: str = ""
+    sunset: str = ""
 
     def describe(self) -> str:
         desc, emoji = wmo(self.code)
-        return f"{emoji} {desc}, {self.temperature:.0f}°C"
+        sun = ""
+        if self.sunrise and self.sunset:
+            sun = f"\n🌅 {self.sunrise} · 🌇 {self.sunset}"
+        return f"{emoji} {desc}, {self.temperature:.0f}°C{sun}"
 
 
 class DayForecast(BaseModel):
@@ -88,14 +93,19 @@ def _parse_geocode(payload: dict) -> GeoPoint | None:
 
 
 def _parse_current(payload: dict) -> CurrentWeather:
-    """Разбирает секцию current ответа /v1/forecast."""
+    """Разбирает секции current и daily (sunrise/sunset) ответа /v1/forecast."""
     cur = payload.get("current") or {}
+    daily = payload.get("daily") or {}
+    sunrises = daily.get("sunrise") or []
+    sunsets = daily.get("sunset") or []
     return CurrentWeather(
         time=str(cur.get("time") or ""),
         temperature=float(cur.get("temperature_2m") or 0),
         wind_speed=float(cur.get("wind_speed_10m") or 0),
         humidity=float(cur.get("relative_humidity_2m") or 0),
         code=int(cur.get("weather_code") or 0),
+        sunrise=str(sunrises[0])[-5:] if sunrises else "",
+        sunset=str(sunsets[0])[-5:] if sunsets else "",
     )
 
 
@@ -191,7 +201,7 @@ class WeatherClient:
             "latitude": lat,
             "longitude": lon,
             "current": "temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code",
-            "daily": "weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max",
+            "daily": "weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset",
             "timezone": "auto",
             "forecast_days": days,
         }
