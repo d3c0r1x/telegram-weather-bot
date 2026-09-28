@@ -37,7 +37,7 @@ export WEATHER_DEMO_MODE=1               # 0 — реальный Open-Meteo
 python bot.py
 ```
 
-На Windows — `run_bot7.cmd` (токен из корневого `.env`).
+На Windows — `start.bat` (токен из корневого `.env`).
 
 ## Структура проекта
 

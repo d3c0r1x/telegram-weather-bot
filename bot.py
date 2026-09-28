@@ -15,7 +15,7 @@
   - чистые функции парсинга Open-Meteo (_parse_*) — покрыты unit-тестами;
   - middlewares: троттлинг и логирование.
 
-Запуск:  python bot.py   (задайте WEATHER_BOT_TOKEN, или run_bot7.cmd).
+Запуск:  python bot.py   (задайте WEATHER_BOT_TOKEN, или start.bat).
 """
 from __future__ import annotations
 
