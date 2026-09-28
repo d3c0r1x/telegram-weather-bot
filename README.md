@@ -1,5 +1,7 @@
 # Telegram Weather Bot
 
+[![CI](https://github.com/d3c0r1x/telegram-weather-bot/actions/workflows/ci.yml/badge.svg)](https://github.com/d3c0r1x/telegram-weather-bot/actions/workflows/ci.yml)
+
 Погода в Telegram: по названию города возвращает температуру, ощущаемую температуру, ветер, влажность и прогноз на 7 дней. Город по умолчанию сохраняется; подписчикам бот отправляет погоду ежедневно в 9:00.
 
 Данные — **Open-Meteo**: бесплатный публичный API без ключа и без лимитов для личного использования. Геокодинг городов — через их же API.
